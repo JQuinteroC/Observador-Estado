@@ -1,8 +1,5 @@
 package GUI;
 
-import Logica.Builder;
-import Logica.ConstructorHuevo;
-import Logica.Huevo;
 import Logica.Mascota;
 import Logica.Personaje;
 import Logica.Poblacion;
@@ -66,54 +63,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
     // <editor-fold defaultstate="collapsed" desc="Key listeners">  
     @Override
     public void keyPressed(KeyEvent e) {
-        //JOptionPane.showMessageDialog(null, e.getKeyChar());
-        switch (e.getKeyCode()) { //Personaje Individual
-            case 39:
-                grupo.operacion(1);
-                break;
-            case 38:
-                grupo.operacion(2);
-                break;
-            case 37:
-                grupo.operacion(3);
-                break;
-            case 40:
-                grupo.operacion(4);
-                break;
-            case 97:
-                grupo.operacion(5);
-                break;
-            case 98:
-                grupo.operacion(7);
-                break;
-            case 99:
-                grupo.operacion(6);
-                break;
-            default:
-                break;
-        }
-        switch (e.getKeyChar()) { //Personaje clonado
-            case 'w':
-                grupo2.operacion(2);
-                break;
-            case 'a':
-                grupo2.operacion(3);
-                break;
-            case 's':
-                grupo2.operacion(4);
-                break;
-            case 'd':
-                grupo2.operacion(1);
-                break;
-            case 'e':
-                grupo2.operacion(5);
-                break;
-            case 'r':
-                grupo2.operacion(6);
-                break;
-            case 'f':
-                grupo2.operacion(7);
-                break;
+        switch (e.getKeyChar()) {
             case 'q':
                 FRM_Selector selector = null;
                 try {
@@ -124,8 +74,8 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                 selector.setVisible(true);
 
                 // Se interrumpe el hilo
-                grupo.operacion(8);
-                grupo2.operacion(8);
+                grupo.operar(e);
+                grupo2.operar(e);
                 ;
                 this.dispose();
                 break;
@@ -161,6 +111,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                 }
                 break;
             default:
+                grupo.operar(e);
                 break;
         }
         for (int i = 0; i < p.size(); i++) {
@@ -183,7 +134,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                     try {
                         mas = new Mascota(p.get(i), panel);
                         p.set(i, mas);
-                        if (team==1) {
+                        if (team == 1) {
                             grupo.addPersonaje(mas);
                         } else {
                             grupo2.addPersonaje(mas);
@@ -192,6 +143,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                         Logger.getLogger(FRM_Visor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     panel.add(p.get(i));
+                    panel.repaint();
                 }
             }
         }

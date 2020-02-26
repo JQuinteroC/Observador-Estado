@@ -2,6 +2,7 @@ package Logica;
 
 import static Logica.Personaje.panel;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -38,14 +39,14 @@ public class Mascota extends Decorador {
     @Override
     public void mover() {
         personaje.x = 0;
-        if(!((personaje.tempDesplazamiento>36)&(personaje.tempDesplazamiento<41))){
+        if (!((personaje.tempDesplazamiento > 36) & (personaje.tempDesplazamiento < 41))) {
             personaje.numero = 0;
-        } 
+        }
         if (!personaje.hilo.isAlive()) {
             personaje.hilo.start();
         }
     }
-    
+
     @Override
     public void saltar() {
         personaje.x = 1;
@@ -143,6 +144,12 @@ public class Mascota extends Decorador {
         } catch (Exception ex) {
             System.out.println("hilo " + personaje.hilo.getName() + " no interrumpido");
         }
+    }
+
+    @Override
+    public void operar(KeyEvent evento) {
+        control = new WASDControl(evento, this);
+        control.operar();
     }
 
     public void dibujarMascota(Personaje per, ImageIcon img, Graphics g) {
