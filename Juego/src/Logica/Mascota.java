@@ -27,6 +27,7 @@ public class Mascota extends Decorador {
     @Override
     public void paint(Graphics g) {
         try {
+            g.drawRect(personaje.hitbox.x, personaje.hitbox.y, personaje.hitbox.width, personaje.hitbox.height);
             ImageIcon mascota = new ImageIcon(ImageIO.read(new File("Recursos\\PowerUp\\1.png")));
             dibujarMascota(personaje, mascota, g);
             personaje.paint(g);
@@ -86,18 +87,22 @@ public class Mascota extends Decorador {
                                 switch (desplazamiento) { //Personaje Individual
                                     case 39:
                                         personaje.desplazamientoHorizontal += 24;
+                                        personaje.hitbox.x += 24;
                                         desplazamiento = 0;
                                         break;
                                     case 38:
                                         personaje.desplazamientoVertical -= 24;
+                                        personaje.hitbox.y -= 24;
                                         desplazamiento = 0;
                                         break;
                                     case 37:
                                         personaje.desplazamientoHorizontal -= 24;
+                                        personaje.hitbox.x -= 24;
                                         desplazamiento = 0;
                                         break;
                                     case 40:
                                         personaje.desplazamientoVertical += 24;
+                                        personaje.hitbox.y += 24;
                                         desplazamiento = 0;
                                         break;
                                     default:

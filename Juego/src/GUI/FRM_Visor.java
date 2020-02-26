@@ -34,10 +34,13 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         this.p.add(p.clone());
         this.p.get(1).setDesplazamientoVertical(45);
         this.p.get(1).setDesplazamientoHorizontal(460);
+        this.p.get(1).setHitbox(460, 45, this.p.get(1).getAncho(), this.p.get(1).getAlto());
         this.p.get(2).setDesplazamientoVertical(-10);
         this.p.get(2).setDesplazamientoHorizontal(530);
+        this.p.get(2).setHitbox(530, -10, this.p.get(2).getAncho(), this.p.get(2).getAlto());
         this.p.get(3).setDesplazamientoVertical(-10);
         this.p.get(3).setDesplazamientoHorizontal(390);
+        this.p.get(3).setHitbox(390, -10, this.p.get(3).getAncho(), this.p.get(3).getAlto());
         panel.add(this.p.get(0));
         panel.add(this.p.get(1));
         panel.add(this.p.get(2));
@@ -51,8 +54,9 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         //Metiendo al huevito
         huevo.setPanel(panel);
         this.huevos.add(huevo);
-        this.huevos.get(0).setDesplazamientoVertical(250);
+        this.huevos.get(0).setDesplazamientoVertical(300);
         this.huevos.get(0).setDesplazamientoHorizontal(480);
+        this.huevos.get(0).setHitbox(480-91, 300-40, this.huevos.get(0).getAncho()+192, (this.huevos.get(0).getAlto()/2)+125);
         panel.add(this.huevos.get(0));
 
         // Integración del listener 
@@ -165,7 +169,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         }
         for (int i = 0; i < p.size(); i++) {
             for (int j = 0; j < huevos.size(); j++) {
-                if (p.get(i).hitbox.intersects(huevos.get(j).hitbox)) {
+                if (p.get(i).getHitbox().intersects(huevos.get(j).getHitbox())) {
 //                if (colision(p.get(i), huevos.get(j)) == true) {
                     huevos.get(j).interrumpir();
                     panel.remove(huevos.get(j));
