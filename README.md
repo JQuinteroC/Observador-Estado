@@ -1,6 +1,5 @@
-# Power-Up
-Aplicando los modelos Decorator y Composite, crear un power-up y gestionar el comportamiento poblacional
-
+# Cadena de responsabilidad y estrategia
+Aplicando los modelos resposability-chain y strategy, crear un sistema de control de movimiento con dos estrategias y reproducción de música de fondo
 Jose Quintero
 
 Mateo Ardila
