@@ -58,6 +58,7 @@ public class FRM_Selector extends javax.swing.JFrame {
         lblMago = new javax.swing.JLabel();
         lblDuende = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        Cancion = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(834, 488));
@@ -107,15 +108,24 @@ public class FRM_Selector extends javax.swing.JFrame {
         jLabel2.setText("Selecciona a un personaje");
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+        Cancion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cancion 1", "Cancion 2" }));
+        Cancion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancionActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(lblMago, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .add(28, 28, 28)
                 .add(lblDuende, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(56, 56, 56)
+                .add(Cancion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .add(org.jdesktop.layout.GroupLayout.TRAILING, jLabel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -127,7 +137,10 @@ public class FRM_Selector extends javax.swing.JFrame {
                 .add(18, 18, 18)
                 .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(lblMago, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
-                    .add(lblDuende, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(lblDuende, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(Cancion, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -156,7 +169,7 @@ public class FRM_Selector extends javax.swing.JFrame {
         Builder build2 = new Builder();
         build2.setConstructor(new ConstructorHuevo());
         build2.CrearPersonaje();
-        FRM_Visor ventana = new FRM_Visor(build.getPersonaje(),build2.getPersonaje());
+        FRM_Visor ventana = new FRM_Visor(build.getPersonaje(),build2.getPersonaje(),Cancion.getSelectedIndex());
         ventana.setVisible(true);
         this.setVisible(false);
         dispose();
@@ -169,7 +182,7 @@ public class FRM_Selector extends javax.swing.JFrame {
         Builder build2 = new Builder();
         build2.setConstructor(new ConstructorHuevo());
         build2.CrearPersonaje();
-        FRM_Visor ventana = new FRM_Visor(build.getPersonaje(),build2.getPersonaje());
+        FRM_Visor ventana = new FRM_Visor(build.getPersonaje(),build2.getPersonaje(),Cancion.getSelectedIndex());
         ventana.setVisible(true);
         this.setVisible(false);
         dispose();
@@ -219,7 +232,12 @@ public class FRM_Selector extends javax.swing.JFrame {
         lblDuende.setIcon(l);
     }//GEN-LAST:event_lblDuendeMouseExited
 
+    private void CancionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CancionActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> Cancion;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblDuende;

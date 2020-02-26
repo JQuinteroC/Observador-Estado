@@ -46,6 +46,7 @@ public abstract class EstrategiaControl {
         }
         if (accion == 8) {
             personaje.interrumpir();
+            
         }
     }
 

@@ -17,8 +17,10 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
     ArrayList<Personaje> huevos = new ArrayList<>();
     Poblacion grupo = new Poblacion("Grupo1");
     Poblacion grupo2 = new Poblacion("Grupo2");
+    Reproductor[] repro = new Reproductor[2];
+    Thread musica;
 
-    public FRM_Visor(Personaje p, Personaje huevo) {
+    public FRM_Visor(Personaje p, Personaje huevo, int cancion) {
         // Instancia de la ventana
         initComponents();
         super.setLocationRelativeTo(null);
@@ -58,10 +60,14 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
 
+        repro[0] = new Reproductor1();
+        repro[1] = new Reproductor2();
+        repro[0].setSuccessor(repro[1]);
+        repro[0].cancion=cancion;
+        repro[0].start();
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Key listeners">  
-    @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyChar()) {
             case 'q':
@@ -76,6 +82,8 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                 // Se interrumpe el hilo
                 grupo.operar(e);
                 grupo2.operar(e);
+                repro[0].stop();
+                repro[1].stop();
                 ;
                 this.dispose();
                 break;
