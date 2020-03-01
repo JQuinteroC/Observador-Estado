@@ -1,5 +1,6 @@
 package Logica;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 /**
@@ -9,19 +10,30 @@ import java.util.ArrayList;
 public class Poblacion implements Composite {
 
     private String nombrePoblacion = "";
-    ArrayList<Composite> poblacion = new ArrayList<Composite>();
+    ArrayList<Composite> poblacion = new ArrayList<>();
 
     public Poblacion(String nombre) {
         this.nombrePoblacion = nombre;
     }
 
     @Override
-    public void operacion(int accion) {
-
+    public void operar(KeyEvent evento) {
         for (int i = 0; i < poblacion.size(); i++) {
-            poblacion.get(i).operacion(accion);
+            poblacion.get(i).operar(evento);
         }
 
+    }
+
+    public boolean isHere(Personaje p) {
+        if (poblacion.contains(p)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void deletePerson(Personaje p) {
+        poblacion.remove(p);
     }
 
     public void addPersonaje(Composite p) {

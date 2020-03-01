@@ -2,6 +2,7 @@ package Logica;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -31,6 +32,7 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     boolean animar = false; // Controla la ejecución de la animación
     static JPanel panel = null;
     public Thread hilo;
+    protected EstrategiaControl control;
 
     // CONSTRUCTOR
     public Personaje() {
@@ -82,25 +84,25 @@ public class Personaje extends JComponent implements Cloneable, Composite {
                                     case 39:
                                         desplazamientoHorizontal += 24;
                                         hitbox.x += 24;
-                                        tempDesplazamiento=desplazamiento;
+                                        tempDesplazamiento = desplazamiento;
                                         desplazamiento = 0;
                                         break;
                                     case 38:
                                         desplazamientoVertical -= 24;
                                         hitbox.y -= 24;
-                                        tempDesplazamiento=desplazamiento;
+                                        tempDesplazamiento = desplazamiento;
                                         desplazamiento = 0;
                                         break;
                                     case 37:
                                         desplazamientoHorizontal -= 24;
                                         hitbox.x -= 24;
-                                        tempDesplazamiento=desplazamiento;
+                                        tempDesplazamiento = desplazamiento;
                                         desplazamiento = 0;
                                         break;
                                     case 40:
                                         desplazamientoVertical += 24;
                                         hitbox.y += 24;
-                                        tempDesplazamiento=desplazamiento;
+                                        tempDesplazamiento = desplazamiento;
                                         desplazamiento = 0;
                                         break;
                                     default:
@@ -233,7 +235,7 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     // ANIMACIONES
     public void mover() {
         x = 0;
-        if(!((tempDesplazamiento>36)&(tempDesplazamiento<41))){
+        if (!((tempDesplazamiento > 36) & (tempDesplazamiento < 41))) {
             numero = 0;
         }
         if (!hilo.isAlive()) {
@@ -267,11 +269,9 @@ public class Personaje extends JComponent implements Cloneable, Composite {
 
     //operacion necesaria para el manejo de poblaciones
     @Override
-    public void operacion(int accion) {
-        if (accion == 1) {
-            this.desplazamiento = 39;
-            this.mover();
-        }
+    public void operar(KeyEvent evento) {
+        control = new FlechasControl(evento, this);
+        control.operar();
     }
 
     public void interrumpir() {

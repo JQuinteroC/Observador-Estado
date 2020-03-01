@@ -1,10 +1,12 @@
 package Logica;
 
+import java.awt.event.KeyEvent;
+
 /**
  *
  * @author Mateo
  */
 public interface Composite {
 
-    public void operacion(int accion);
+    public void operar(KeyEvent accion);
 }

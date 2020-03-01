@@ -1,8 +1,5 @@
 package GUI;
 
-import Logica.Builder;
-import Logica.ConstructorHuevo;
-import Logica.Huevo;
 import Logica.Mascota;
 import Logica.Personaje;
 import Logica.Poblacion;
@@ -20,8 +17,10 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
     ArrayList<Personaje> huevos = new ArrayList<>();
     Poblacion grupo = new Poblacion("Grupo1");
     Poblacion grupo2 = new Poblacion("Grupo2");
+    Reproductor[] repro = new Reproductor[2];
+    Thread musica;
 
-    public FRM_Visor(Personaje p, Personaje huevo) {
+    public FRM_Visor(Personaje p, Personaje huevo, int cancion) {
         // Instancia de la ventana
         initComponents();
         super.setLocationRelativeTo(null);
@@ -45,6 +44,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         panel.add(this.p.get(1));
         panel.add(this.p.get(2));
         panel.add(this.p.get(3));
+
         //se crean las poblaciones del patron Composite
         grupo.addPersonaje(this.p.get(0));
         grupo2.addPersonaje(this.p.get(1));
@@ -64,89 +64,16 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
 
+        repro[0] = new Reproductor1();
+        repro[1] = new Reproductor2();
+        repro[0].setSuccessor(repro[1]);
+        repro[0].cancion=cancion;
+        repro[0].start();
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="Key listeners">  
-    @Override
     public void keyPressed(KeyEvent e) {
-        //JOptionPane.showMessageDialog(null, e.getKeyChar());
-        switch (e.getKeyCode()) { //Personaje Individual
-            case 39:
-                p.get(0).mover();
-                p.get(0).desplazamiento = 39;
-                break;
-            case 38:
-                p.get(0).mover();
-                p.get(0).desplazamiento = 38;
-                break;
-            case 37:
-                p.get(0).mover();
-                p.get(0).desplazamiento = 37;
-                break;
-            case 40:
-                p.get(0).mover();
-                p.get(0).desplazamiento = 40;
-                break;
-            case 97:
-                p.get(0).atacar();
-                break;
-            case 98:
-                p.get(0).saltar();
-                break;
-            case 99:
-                p.get(0).morir();
-                break;
-            default:
-                break;
-        }
-        switch (e.getKeyChar()) { //Personaje clonado
-            case 'w':
-                p.get(1).mover();
-                p.get(2).mover();
-                p.get(3).mover();
-                p.get(1).desplazamiento = 38;
-                p.get(2).desplazamiento = 38;
-                p.get(3).desplazamiento = 38;
-                break;
-            case 'a':
-                p.get(1).mover();
-                p.get(2).mover();
-                p.get(3).mover();
-                p.get(1).desplazamiento = 37;
-                p.get(2).desplazamiento = 37;
-                p.get(3).desplazamiento = 37;
-                break;
-            case 's':
-                p.get(1).mover();
-                p.get(2).mover();
-                p.get(3).mover();
-                p.get(1).desplazamiento = 40;
-                p.get(2).desplazamiento = 40;
-                p.get(3).desplazamiento = 40;
-                break;
-            case 'd':
-                p.get(1).mover();
-                p.get(2).mover();
-                p.get(3).mover();
-                p.get(1).desplazamiento = 39;
-                p.get(2).desplazamiento = 39;
-                p.get(3).desplazamiento = 39;
-                break;
-            case 'e':
-                p.get(1).atacar();
-                p.get(2).atacar();  // espacio:32,enter:10,e:69, f:70,a:65, 1:97, 2:98, 3: 99
-                p.get(3).atacar();
-                break;
-            case 'r':
-                p.get(1).morir();
-                p.get(2).morir();
-                p.get(3).morir();
-                break;
-            case 'f':
-                p.get(1).saltar();
-                p.get(2).saltar();
-                p.get(3).saltar();
-                break;
+        switch (e.getKeyChar()) {
             case 'q':
                 FRM_Selector selector = null;
                 try {
@@ -157,33 +84,78 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                 selector.setVisible(true);
 
                 // Se interrumpe el hilo
-                for (int i = 0; i < p.size(); i++) {
-                    p.get(i).interrumpir();
-                }
-
+                grupo.operar(e);
+                grupo2.operar(e);
+                repro[0].stop();
+                repro[1].stop();
+                ;
                 this.dispose();
                 break;
+            case '+':
+                boolean agregado = false;
+                for (int i = 0; i < 4; i++) {
+                    if (grupo.isHere(p.get(i))) {
+                    } else {
+                        grupo2.deletePerson(p.get(i));
+                        grupo.addPersonaje(this.p.get(i));
+                        agregado = true;
+                        i = 10;
+                    }
+                }
+                if (!agregado) {
+                    JOptionPane.showMessageDialog(null, "No hay mas personajes para agregar");
+                }
 
+                break;
+            case '-':
+                agregado = false;
+                for (int i = 3; i >= 0; i--) {
+                    if (grupo2.isHere(p.get(i))) {
+                    } else {
+                        grupo.deletePerson(p.get(i));
+                        grupo2.addPersonaje(this.p.get(i));
+                        agregado = true;
+                        i = -1;
+                    }
+                }
+                if (!agregado) {
+                    JOptionPane.showMessageDialog(null, "No hay mas personajes para agregar");
+                }
+                break;
             default:
+                grupo.operar(e);
                 break;
         }
         for (int i = 0; i < p.size(); i++) {
             for (int j = 0; j < huevos.size(); j++) {
                 if (p.get(i).getHitbox().intersects(huevos.get(j).getHitbox())) {
-//                if (colision(p.get(i), huevos.get(j)) == true) {
+                    int team = 0;
                     huevos.get(j).interrumpir();
                     panel.remove(huevos.get(j));
                     huevos.remove(j);
                     p.get(i).interrumpir();
                     panel.remove(p.get(i));
+                    if (grupo.isHere(p.get(i))) {
+                        grupo.deletePerson(p.get(i));
+                        team = 1;
+                    } else {
+                        grupo2.deletePerson(p.get(i));
+                        team = 2;
+                    }
                     Personaje mas;
                     try {
                         mas = new Mascota(p.get(i), panel);
                         p.set(i, mas);
+                        if (team == 1) {
+                            grupo.addPersonaje(mas);
+                        } else {
+                            grupo2.addPersonaje(mas);
+                        }
                     } catch (IOException ex) {
                         Logger.getLogger(FRM_Visor.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     panel.add(p.get(i));
+                    panel.repaint();
                 }
             }
         }
