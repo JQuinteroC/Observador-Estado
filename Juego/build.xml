@@ -57,7 +57,6 @@
       test-report:              JUnit report generation
 
     An example of overriding the target for project execution could look like this:
-
         <target name="run" depends="JuegoV4-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>

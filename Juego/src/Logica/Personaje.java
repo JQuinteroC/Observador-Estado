@@ -1,6 +1,7 @@
 package Logica;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -26,6 +27,7 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     int alto = 0;
     int desplazamientoVertical = 0;
     int desplazamientoHorizontal = 0;
+    Rectangle hitbox;
     boolean relacion = false; // Variable solo para mantener el aspecto en las animaciónes del Mago
     boolean animar = false; // Controla la ejecución de la animación
     static JPanel panel = null;
@@ -54,7 +56,7 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     }
 
     public void setDesplazamientoVertical(int desplazamiento) {
-        this.desplazamientoVertical = desplazamiento;
+        this.desplazamientoVertical = desplazamiento;      
     }
 
     public void setDesplazamientoHorizontal(int desplazamiento) {
@@ -81,21 +83,25 @@ public class Personaje extends JComponent implements Cloneable, Composite {
                                 switch (desplazamiento) { //Personaje Individual
                                     case 39:
                                         desplazamientoHorizontal += 24;
+                                        hitbox.x += 24;
                                         tempDesplazamiento = desplazamiento;
                                         desplazamiento = 0;
                                         break;
                                     case 38:
                                         desplazamientoVertical -= 24;
+                                        hitbox.y -= 24;
                                         tempDesplazamiento = desplazamiento;
                                         desplazamiento = 0;
                                         break;
                                     case 37:
                                         desplazamientoHorizontal -= 24;
+                                        hitbox.x -= 24;
                                         tempDesplazamiento = desplazamiento;
                                         desplazamiento = 0;
                                         break;
                                     case 40:
                                         desplazamientoVertical += 24;
+                                        hitbox.y += 24;
                                         tempDesplazamiento = desplazamiento;
                                         desplazamiento = 0;
                                         break;
@@ -192,6 +198,7 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     @Override
     public void paint(Graphics g) {
         try {
+            g.drawRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
             switch (x) {
                 case 0:
                     g.drawImage(caminar[numero].getImage(), 50 + desplazamientoHorizontal, 0 + desplazamientoVertical, ancho, alto, null);
@@ -289,5 +296,13 @@ public class Personaje extends JComponent implements Cloneable, Composite {
 
     public int getDesplazamientoVertical() {
         return desplazamientoVertical;
+    }
+    
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
+    
+    public void setHitbox(int x,int y,int ancho,int alto) {
+        hitbox = new Rectangle(x+(ancho/2)-10, y+(alto/4), (ancho/2)-40, (alto/2)+25);
     }
 }

@@ -1,5 +1,6 @@
 package Logica;
 
+import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 
 /**
@@ -16,5 +17,6 @@ public class Huevo extends Personaje{
         super.saltar = new ImageIcon[1];
         super.morir = new ImageIcon[1];
         super.atacar = new ImageIcon[1];
+        super.hitbox = new Rectangle(desplazamientoHorizontal+(ancho/2)-3, desplazamientoVertical+(alto/4)-30, ancho, (alto/2)+60);  
     }
 }
