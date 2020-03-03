@@ -56,7 +56,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         this.huevos.add(huevo);
         this.huevos.get(0).setDesplazamientoVertical(300);
         this.huevos.get(0).setDesplazamientoHorizontal(480);
-        this.huevos.get(0).setHitbox(480-91, 300-40, this.huevos.get(0).getAncho()+192, (this.huevos.get(0).getAlto()/2)+125);
+        this.huevos.get(0).setHitbox(480 - 91, 300 - 40, this.huevos.get(0).getAncho() + 192, (this.huevos.get(0).getAlto() / 2) + 125);
         panel.add(this.huevos.get(0));
 
         // Integración del listener 
@@ -67,7 +67,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         repro[0] = new Reproductor1();
         repro[1] = new Reproductor2();
         repro[0].setSuccessor(repro[1]);
-        repro[0].cancion=cancion;
+        repro[0].cancion = cancion;
         repro[0].start();
 
     }
@@ -83,9 +83,7 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                 }
                 selector.setVisible(true);
 
-                // Se interrumpe el hilo
-                grupo.operar(e);
-                grupo2.operar(e);
+                // Se interrumpe el hilo de musica
                 repro[0].stop();
                 repro[1].stop();
                 ;
@@ -121,6 +119,9 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                 if (!agregado) {
                     JOptionPane.showMessageDialog(null, "No hay mas personajes para agregar");
                 }
+                break;
+            case 10:
+                grupo.cambiarControl();
                 break;
             default:
                 grupo.operar(e);

@@ -33,6 +33,7 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     static JPanel panel = null;
     public Thread hilo;
     protected EstrategiaControl control;
+    protected boolean tipoControl;
 
     // CONSTRUCTOR
     public Personaje() {
@@ -48,6 +49,7 @@ public class Personaje extends JComponent implements Cloneable, Composite {
         alto = 0;
         relacion = false;
         panel = null;
+        tipoControl = true;
     }
 
     // SET AND GET
@@ -56,7 +58,7 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     }
 
     public void setDesplazamientoVertical(int desplazamiento) {
-        this.desplazamientoVertical = desplazamiento;      
+        this.desplazamientoVertical = desplazamiento;
     }
 
     public void setDesplazamientoHorizontal(int desplazamiento) {
@@ -270,8 +272,13 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     //operacion necesaria para el manejo de poblaciones
     @Override
     public void operar(KeyEvent evento) {
-        control = new FlechasControl(evento, this);
-        control.operar();
+        if (tipoControl) {
+            control = new FlechasControl(evento, this);
+            control.operar();
+        } else {
+            control = new WASDControl(evento, this);
+            control.operar();
+        }
     }
 
     public void interrumpir() {
@@ -297,12 +304,17 @@ public class Personaje extends JComponent implements Cloneable, Composite {
     public int getDesplazamientoVertical() {
         return desplazamientoVertical;
     }
-    
+
     public Rectangle getHitbox() {
         return hitbox;
     }
-    
-    public void setHitbox(int x,int y,int ancho,int alto) {
-        hitbox = new Rectangle(x+(ancho/2)-10, y+(alto/4), (ancho/2)-40, (alto/2)+25);
+
+    public void setHitbox(int x, int y, int ancho, int alto) {
+        hitbox = new Rectangle(x + (ancho / 2) - 10, y + (alto / 4), (ancho / 2) - 40, (alto / 2) + 25);
+    }
+
+    @Override
+    public void cambiarControl() {
+        tipoControl = !tipoControl;
     }
 }

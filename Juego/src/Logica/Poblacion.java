@@ -19,11 +19,16 @@ public class Poblacion implements Composite {
     @Override
     public void operar(KeyEvent evento) {
         for (int i = 0; i < poblacion.size(); i++) {
-            poblacion.get(i).operar(evento);
+            poblacion.get(i).operar(evento);   
         }
-
     }
 
+    @Override
+    public void cambiarControl(){
+        for (int i = 0; i < poblacion.size(); i++) {
+            poblacion.get(i).cambiarControl();
+        }
+    }
     public boolean isHere(Personaje p) {
         if (poblacion.contains(p)) {
             return true;

@@ -32,7 +32,7 @@ public class Mascota extends Decorador {
             ImageIcon mascota = new ImageIcon(ImageIO.read(new File("Recursos\\PowerUp\\1.png")));
             dibujarMascota(personaje, mascota, g);
             personaje.paint(g);
-        } catch (Exception ex) {
+        } catch (IOException ex) {
 
         }
     }
@@ -85,7 +85,7 @@ public class Mascota extends Decorador {
                         switch (personaje.x) {
                             case 0:
                                 personaje.numero++;
-                                switch (desplazamiento) { //Personaje Individual
+                                switch (desplazamiento) {
                                     case 39:
                                         personaje.desplazamientoHorizontal += 24;
                                         personaje.hitbox.x += 24;
@@ -153,8 +153,13 @@ public class Mascota extends Decorador {
 
     @Override
     public void operar(KeyEvent evento) {
-        control = new WASDControl(evento, this);
-        control.operar();
+        if (tipoControl) {
+            control = new WASDControl(evento, this);
+            control.operar();
+        } else {
+            control = new FlechasControl(evento, this);
+            control.operar();
+        }
     }
 
     public void dibujarMascota(Personaje per, ImageIcon img, Graphics g) {

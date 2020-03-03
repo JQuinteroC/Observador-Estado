@@ -9,4 +9,6 @@ import java.awt.event.KeyEvent;
 public interface Composite {
 
     public void operar(KeyEvent accion);
+    
+    public void cambiarControl();
 }
