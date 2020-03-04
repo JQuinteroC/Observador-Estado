@@ -3,6 +3,9 @@ package GUI;
 import Logica.Mascota;
 import Logica.Personaje;
 import Logica.Poblacion;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -182,6 +185,11 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panel.setOpaque(false);
+        panel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                panelMouseClicked(evt);
+            }
+        });
 
         org.jdesktop.layout.GroupLayout panelLayout = new org.jdesktop.layout.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -202,6 +210,22 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMouseClicked
+        PointerInfo a = MouseInfo.getPointerInfo();
+        Point b = a.getLocation();
+        int x = (int) b.getX() - this.getX()-8;
+        int y = (int) b.getY() - this.getY()-32;
+        System.out.println("Mouse Coord X:" + x);
+        System.out.println("Mouse Coord Y:" + y);
+//        System.out.println("Person Coord X:" + p.get(1).getHitbox().getX());
+//        System.out.println("Person Coord Y:" + p.get(1).getHitbox().getY());
+        for (int i = 0; i < p.size(); i++) {
+            if (colisionPointer(x, y, p.get(i))) {
+                System.out.println("Hitbox clickeada");
+            }
+        }
+    }//GEN-LAST:event_panelMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel fondo;
     private javax.swing.JPanel panel;
@@ -211,6 +235,14 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         System.out.println("X Duende: " + p.getDesplazamientoHorizontal() + ", Y Duende: " + p.getDesplazamientoVertical());
         System.out.println("X Huevo: " + huevo.getDesplazamientoHorizontal() + ", Y Huevo: " + huevo.getDesplazamientoVertical());
         if ((p.getDesplazamientoHorizontal() + p.getAncho() > huevo.getDesplazamientoHorizontal()) & (p.getDesplazamientoHorizontal() < huevo.getDesplazamientoHorizontal() + (huevo.getAncho())) & (p.getDesplazamientoVertical() > huevo.getDesplazamientoVertical()) & (p.getDesplazamientoVertical() < huevo.getDesplazamientoVertical() + (huevo.getAlto()))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean colisionPointer(int x, int y, Personaje personaje) {
+        if ((x > personaje.getHitbox().getX()) & (x < personaje.getHitbox().getX() + (personaje.getHitbox().getWidth())) & (y > personaje.getHitbox().getY()) & (y < personaje.getHitbox().getY() + personaje.getHitbox().getHeight())) {
             return true;
         } else {
             return false;
