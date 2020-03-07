@@ -14,45 +14,46 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
-public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
+public class FRM_Visor extends javax.swing.JFrame implements KeyListener, Observable {
 
-    ArrayList<Personaje> p = new ArrayList<>();
+    ArrayList<Personaje> personajes = new ArrayList<>();
     ArrayList<Personaje> huevos = new ArrayList<>();
-    Poblacion grupo = new Poblacion("Grupo1");
-    Poblacion grupo2 = new Poblacion("Grupo2");
+    ArrayList<Observador> observadores = new ArrayList<>();
+    Grupos grupos = new Grupos();
     Reproductor[] repro = new Reproductor[2];
     Thread musica;
 
     public FRM_Visor(Personaje p, Personaje huevo, int cancion) {
+
         // Instancia de la ventana
         initComponents();
         super.setLocationRelativeTo(null);
 
         // Configuración del personaje y grupo
         p.setPanel(panel);
-        this.p.add(p);
-        this.p.add(p.clone());
-        this.p.add(p.clone());
-        this.p.add(p.clone());
-        this.p.get(1).setDesplazamientoVertical(45);
-        this.p.get(1).setDesplazamientoHorizontal(460);
-        this.p.get(1).setHitbox(460, 45, this.p.get(1).getAncho(), this.p.get(1).getAlto());
-        this.p.get(2).setDesplazamientoVertical(-10);
-        this.p.get(2).setDesplazamientoHorizontal(530);
-        this.p.get(2).setHitbox(530, -10, this.p.get(2).getAncho(), this.p.get(2).getAlto());
-        this.p.get(3).setDesplazamientoVertical(-10);
-        this.p.get(3).setDesplazamientoHorizontal(390);
-        this.p.get(3).setHitbox(390, -10, this.p.get(3).getAncho(), this.p.get(3).getAlto());
-        panel.add(this.p.get(0));
-        panel.add(this.p.get(1));
-        panel.add(this.p.get(2));
-        panel.add(this.p.get(3));
+        this.personajes.add(p.clone());
+        this.personajes.add(p.clone());
+        this.personajes.add(p);
+        this.personajes.add(p.clone());
+        this.personajes.get(1).setDesplazamientoVertical(45);
+        this.personajes.get(1).setDesplazamientoHorizontal(460);
+        this.personajes.get(1).setHitbox(460, 45, this.personajes.get(1).getAncho(), this.personajes.get(1).getAlto());
+        this.personajes.get(2).setDesplazamientoVertical(-10);
+        this.personajes.get(2).setDesplazamientoHorizontal(530);
+        this.personajes.get(2).setHitbox(530, -10, this.personajes.get(2).getAncho(), this.personajes.get(2).getAlto());
+        this.personajes.get(3).setDesplazamientoVertical(-10);
+        this.personajes.get(3).setDesplazamientoHorizontal(390);
+        this.personajes.get(3).setHitbox(390, -10, this.personajes.get(3).getAncho(), this.personajes.get(3).getAlto());
+        panel.add(this.personajes.get(0));
+        panel.add(this.personajes.get(1));
+        panel.add(this.personajes.get(2));
+        panel.add(this.personajes.get(3));
 
         //se crean las poblaciones del patron Composite
-        grupo.addPersonaje(this.p.get(0));
-        grupo2.addPersonaje(this.p.get(1));
-        grupo2.addPersonaje(this.p.get(2));
-        grupo2.addPersonaje(this.p.get(3));
+        grupos.grupo.addPersonaje(this.personajes.get(0));
+        grupos.grupo2.addPersonaje(this.personajes.get(1));
+        grupos.grupo2.addPersonaje(this.personajes.get(2));
+        grupos.grupo2.addPersonaje(this.personajes.get(3));
 
         //Metiendo al huevito
         huevo.setPanel(panel);
@@ -67,12 +68,26 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
 
+        //añadir observadores 
+        observadores.add(grupos);
+
+        //reproductores del chain 
         repro[0] = new Reproductor1();
         repro[1] = new Reproductor2();
         repro[0].setSuccessor(repro[1]);
         repro[0].cancion = cancion;
         repro[0].start();
 
+    }
+
+    @Override
+    public void notificar() {
+    }
+
+    public void notificar(Personaje p) {
+        for (Observador o : observadores) {
+            o.update(p);
+        }
     }
 
     public void keyPressed(KeyEvent e) {
@@ -89,16 +104,15 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                 // Se interrumpe el hilo de musica
                 repro[0].stop();
                 repro[1].stop();
-                ;
                 this.dispose();
                 break;
             case '+':
                 boolean agregado = false;
                 for (int i = 0; i < 4; i++) {
-                    if (grupo.isHere(p.get(i))) {
+                    if (grupos.grupo.isHere(personajes.get(i))) {
                     } else {
-                        grupo2.deletePerson(p.get(i));
-                        grupo.addPersonaje(this.p.get(i));
+                        grupos.grupo2.deletePerson(personajes.get(i));
+                        grupos.grupo.addPersonaje(this.personajes.get(i));
                         agregado = true;
                         i = 10;
                     }
@@ -111,10 +125,10 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
             case '-':
                 agregado = false;
                 for (int i = 3; i >= 0; i--) {
-                    if (grupo2.isHere(p.get(i))) {
+                    if (grupos.grupo2.isHere(personajes.get(i))) {
                     } else {
-                        grupo.deletePerson(p.get(i));
-                        grupo2.addPersonaje(this.p.get(i));
+                        grupos.grupo.deletePerson(personajes.get(i));
+                        grupos.grupo2.addPersonaje(this.personajes.get(i));
                         agregado = true;
                         i = -1;
                     }
@@ -124,41 +138,42 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
                 }
                 break;
             case 10:
-                grupo.cambiarControl();
+                grupos.grupo.cambiarControl();
                 break;
             default:
-                grupo.operar(e);
+                grupos.grupo.operar(e);
                 break;
         }
-        for (int i = 0; i < p.size(); i++) {
+        for (int i = 0; i < personajes.size(); i++) {
             for (int j = 0; j < huevos.size(); j++) {
-                if (p.get(i).getHitbox().intersects(huevos.get(j).getHitbox())) {
+                if (personajes.get(i).getHitbox().intersects(huevos.get(j).getHitbox())) {
                     int team = 0;
                     huevos.get(j).interrumpir();
                     panel.remove(huevos.get(j));
                     huevos.remove(j);
-                    p.get(i).interrumpir();
-                    panel.remove(p.get(i));
-                    if (grupo.isHere(p.get(i))) {
-                        grupo.deletePerson(p.get(i));
+                    personajes.get(i).interrumpir();
+                    panel.remove(personajes.get(i));
+                    if (grupos.grupo.isHere(personajes.get(i))) {
+                        grupos.grupo.deletePerson(personajes.get(i));
                         team = 1;
                     } else {
-                        grupo2.deletePerson(p.get(i));
+                        grupos.grupo2.deletePerson(personajes.get(i));
                         team = 2;
                     }
                     Personaje mas;
                     try {
-                        mas = new Mascota(p.get(i), panel);
-                        p.set(i, mas);
+                        mas = new Mascota(personajes.get(i), panel);
+                        //mas.decorado=true;
+                        personajes.set(i, mas);
                         if (team == 1) {
-                            grupo.addPersonaje(mas);
+                            grupos.grupo.addPersonaje(mas);
                         } else {
-                            grupo2.addPersonaje(mas);
+                            grupos.grupo2.addPersonaje(mas);
                         }
                     } catch (IOException ex) {
                         Logger.getLogger(FRM_Visor.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    panel.add(p.get(i));
+                    panel.add(personajes.get(i));
                     panel.repaint();
                 }
             }
@@ -213,15 +228,11 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
     private void panelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelMouseClicked
         PointerInfo a = MouseInfo.getPointerInfo();
         Point b = a.getLocation();
-        int x = (int) b.getX() - this.getX()-8;
-        int y = (int) b.getY() - this.getY()-32;
-        System.out.println("Mouse Coord X:" + x);
-        System.out.println("Mouse Coord Y:" + y);
-//        System.out.println("Person Coord X:" + p.get(1).getHitbox().getX());
-//        System.out.println("Person Coord Y:" + p.get(1).getHitbox().getY());
-        for (int i = 0; i < p.size(); i++) {
-            if (colisionPointer(x, y, p.get(i))) {
-                System.out.println("Hitbox clickeada");
+        int x = (int) b.getX() - this.getX() - 8;
+        int y = (int) b.getY() - this.getY() - 32;
+        for (int i = 0; i < personajes.size(); i++) {
+            if (colisionPointer(x, y, personajes.get(i))) {
+                notificar(personajes.get(i));
             }
         }
     }//GEN-LAST:event_panelMouseClicked
@@ -232,8 +243,6 @@ public class FRM_Visor extends javax.swing.JFrame implements KeyListener {
     // End of variables declaration//GEN-END:variables
 
     private boolean colision(Personaje p, Personaje huevo) {
-        System.out.println("X Duende: " + p.getDesplazamientoHorizontal() + ", Y Duende: " + p.getDesplazamientoVertical());
-        System.out.println("X Huevo: " + huevo.getDesplazamientoHorizontal() + ", Y Huevo: " + huevo.getDesplazamientoVertical());
         if ((p.getDesplazamientoHorizontal() + p.getAncho() > huevo.getDesplazamientoHorizontal()) & (p.getDesplazamientoHorizontal() < huevo.getDesplazamientoHorizontal() + (huevo.getAncho())) & (p.getDesplazamientoVertical() > huevo.getDesplazamientoVertical()) & (p.getDesplazamientoVertical() < huevo.getDesplazamientoVertical() + (huevo.getAlto()))) {
             return true;
         } else {

@@ -2,6 +2,7 @@ package Logica;
 
 import static Logica.Personaje.panel;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -160,6 +161,31 @@ public class Mascota extends Decorador {
             control = new FlechasControl(evento, this);
             control.operar();
         }
+    }
+   
+    @Override
+    public int getAncho() {
+        return personaje.ancho;
+    }
+
+    @Override
+    public int getAlto() {
+        return personaje.alto;
+    }
+
+    @Override
+    public int getDesplazamientoHorizontal() {
+        return personaje.desplazamientoHorizontal;
+    }
+
+    @Override
+    public int getDesplazamientoVertical() {
+        return personaje.desplazamientoVertical;
+    }
+
+    @Override
+    public Rectangle getHitbox() {
+        return personaje.hitbox;
     }
 
     public void dibujarMascota(Personaje per, ImageIcon img, Graphics g) {
